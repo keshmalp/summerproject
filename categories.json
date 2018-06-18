@@ -1,0 +1,17 @@
+[{
+  "name": "adidas",
+  "product": "pant",
+  "quantity": 25
+}, {
+  "name": "nike",
+  "product": "shirt",
+  "quantity": 25
+}, {
+  "name": "puma",
+  "product": "shoes",
+  "quantity": 130
+}, {
+  "name": "Adidas",
+  "product": "Shirt",
+  "quantity": "23"
+}]

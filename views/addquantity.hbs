@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset = "utf-8">
+    <title>Some website</title>
+  </head>
+  <body>
+    {{>header}}
+    <form action="http://127.0.0.1:3000/add" method="POST">
+      Name:
+      <br>
+      <input type="text" name="name" placeholder="Name"><br>
+      Product:
+      <br>
+      <input type="text" name="product" placeholder="Product"><br>
+      Quantity:
+      <br>
+      <input type="number" name="quantity" placeholder="Quantity">
+      <br><br>
+      <input type="submit" value="Submit">
+    </form>
+  </body>
+</html>
