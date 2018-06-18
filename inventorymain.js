@@ -92,7 +92,7 @@ if (command === 'addCategory') {
   var message = noteadded ? 'Quantity was added' : 'Product was not found';
   console.log(message);
 } else {
-  console.log('Not recognized, chutiya banaya');
+  console.log('Not recognized');
 }
 
 app.use((req,res,next) =>
