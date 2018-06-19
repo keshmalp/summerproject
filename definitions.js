@@ -13,26 +13,36 @@ var savenote = (notes) => {
   fs.writeFileSync('categories.json', JSON.stringify(notes));
 };
 
+
+
 var addCategory = (name,product,quantity) => {
+  var found = true;
   var notes = fetchnote();
   var note = {
     name,
     product,
     quantity
   };
-
-  var duplicate = notes.filter((note) => {
+  var found = false;
+  notes.filter((note) => {
     if(note.name === name)
     {
-      return note.product===product
+      if(note.product===product)
+      {
+        found = false;
+      }
     }
   });
-  if (duplicate.length === 0) {
+  if(found===true)
+  {
     notes.push(note);
     savenote(notes);
-    return note;
+    return true;
   }
-};
+  else {
+    return false;
+    }
+  };
 
 var getAllCategories = () => {
   return fetchnote();

@@ -65,35 +65,35 @@ var definitions = require('./definitions.js');
 //console.log('Yargs.Argv',yargs.argv);
 //console.log('Command:',command);
 
-if (command === 'addCategory') {
-  console.log('Adding Category');
-  var note = definitions.addCategory(argv.name, argv.product,argv.quantity);
-  if (typeof(note) === "undefined") {
-    console.log("This is a duplicate product");
-  } else {
-    definitions.logNote(note);
-  }
-} else if (command === 'getAllCategories') {
-  console.log("All note(s) :");
-  var notem = definitions.getAllCategories();
-  var i;
-  for (i = 0; i < notem.length; i++) {
-    definitions.logNote(notem[i]);
-  }
-
-} else if (command === 'Removequantity') {
-
-  var noteremoved = definitions.Removequantity(argv.name,argv.product,argv.quantity);
-  var message = noteremoved ? 'Quantity was removed' : 'Product was not found';
-  console.log(message);
-
-} else if (command === 'Addquantity') {
-  var noteadded = definitions.Addquantity(argv.name,argv.product,argv.quantity);
-  var message = noteadded ? 'Quantity was added' : 'Product was not found';
-  console.log(message);
-} else {
-  console.log('Not recognized');
-}
+// if (command === 'addCategory') {
+//   console.log('Adding Category');
+//   var note = definitions.addCategory(argv.name, argv.product,argv.quantity);
+//   if (typeof(note) === "undefined") {
+//     console.log("This is a duplicate product");
+//   } else {
+//     definitions.logNote(note);
+//   }
+// } else if (command === 'getAllCategories') {
+//   console.log("All note(s) :");
+//   var notem = definitions.getAllCategories();
+//   var i;
+//   for (i = 0; i < notem.length; i++) {
+//     definitions.logNote(notem[i]);
+//   }
+//
+// } else if (command === 'Removequantity') {
+//
+//   var noteremoved = definitions.Removequantity(argv.name,argv.product,argv.quantity);
+//   var message = noteremoved ? 'Quantity was removed' : 'Product was not found';
+//   console.log(message);
+//
+// } else if (command === 'Addquantity') {
+//   var noteadded = definitions.Addquantity(argv.name,argv.product,argv.quantity);
+//   var message = noteadded ? 'Quantity was added' : 'Product was not found';
+//   console.log(message);
+// } else {
+//   console.log('Not recognized');
+// }
 
 app.use((req,res,next) =>
 {
@@ -143,15 +143,38 @@ app.get('/removequantity',(req,res)=> {
 
 app.post('/add', urlencodedParser, function (req, res) {
     // Prepare output in JSON format
+
+    var bool = definitions.addCategory(req.body.name,req.body.product,parseInt(req.body.quantity));
+    var message = bool ? 'Product Category was added':'This product already exists';
+    console.log(message);
+    res.end(message);
+});
+app.post('/addq', urlencodedParser, function (req, res) {
+    // Prepare output in JSON format
     response = {
         name: req.body.name,
         product: req.body.product,
-        quantity: req.body.quantity
+        quantity: parseInt(req.body.quantity)
     };
 
-    writeResponseToFile(response);
+    var bool = definitions.Addquantity(req.body.name,req.body.product,parseInt(req.body.quantity));
+    var message = bool ? 'Quantity was added':'No such product found';
+    console.log(message);
+    res.end(message);
+});
 
-    res.end(JSON.stringify(response));
+app.post('/removeq', urlencodedParser, function (req, res) {
+    // Prepare output in JSON format
+    response = {
+        name: req.body.name,
+        product: req.body.product,
+        quantity: parseInt(req.body.quantity)
+    };
+
+    var bool = definitions.Removequantity(req.body.name,req.body.product,parseInt(req.body.quantity));
+    var message = bool ? 'Quantity was removed':'No such product exists';
+    console.log(message);
+    res.end(message);
 });
 
 function writeResponseToFile(response) {
