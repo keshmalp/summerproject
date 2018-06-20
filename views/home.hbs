@@ -3,9 +3,44 @@
   <head>
     <meta charset = "utf-8">
     <title>Some website</title>
-  </head>
-  <body>
     {{> header}}
-    {{> footer}}
-  </body>
-</html>
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"> </script>
+
+<script>
+
+    $(function() {
+
+
+   $.getJSON('categories.json', function(data) {
+       $.each(data, function(i, f) {
+          var tblRow = "<tr>" + "<td>" + f.name + "</td>" +
+           "<td>" + f.product + "</td>" + "<td>" + f.quantity + "</td>" + "<td>" + "</tr>"
+           $(tblRow).appendTo("#userdata tbody");
+           console.log(tblrow);
+     });
+  $('div').html(tblrow);
+   });
+
+});
+</script>
+</head>
+
+<body>
+
+<div class="wrapper">
+<div class="profile">
+   <table id= "userdata" border="2">
+  <thead>
+            <th>Name</th>
+            <th>Product</th>
+            <th>Quantity</th>
+        </thead>
+      <tbody>
+
+       </tbody>
+   </table>
+ </div>
+ </div>
+{{> footer}}
+ </body>
+ </html>

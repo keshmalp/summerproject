@@ -4,22 +4,29 @@
 <head>
   <meta charset="utf-8">
   <title>Some website</title>
+  <script language="JavaScript">
+    function showInput() {
+        var input = document.getElementById("user_input").value;
+        document.getElementById('display').innerHTML = "Your input is :\n"+input;
+    }
+  </script>
 </head>
 
 <body>
   {{>header}}
-  <form action="http://127.0.0.1:3000/add" method="POST">
+  <form action="http://localhost:3000/addcategory" method="POST">
     Name:
     <br>
-    <input type="text" name="name" placeholder="Name"><br>
+    <input type="text" name="name" placeholder="Name" id="user_input"><br>
     Product:
     <br>
-    <input type="text" name="product" placeholder="Product"><br>
+    <input type="text" name="product" placeholder="Product" id="user_input"><br>
     Quantity:
     <br>
-    <input type="number" name="quantity" placeholder="Quantity">
+    <input type="number" name="quantity" placeholder="Quantity" id="user_input">
     <br><br>
-    <input type="submit" value="Submit">
+    <input type="submit" value ="Submit" onclick="showInput();"><br/>
+     <p><span id='display'></span></p>
   </form>
 </body>
 

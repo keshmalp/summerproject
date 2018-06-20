@@ -17,50 +17,48 @@ var app=express();
 hbs.registerPartials(__dirname+'/views/partials');
 app.set('view engine','hbs');
 app.use(express.static(__dirname+'/views'));
-
-const nameOptions = {
-  describe: 'Name of note',
-  demand: true,
-  alias: 'n'
-};
-
-const productOptions = {
-  describe: 'Name of product',
-  demand: true,
-  alias: 'p'
-};
-
-const quantityOptions = {
-  describe: 'Name of product',
-  demand: true,
-  alias: 'q'
-};
-
-const argv = yargs
-  .command('addCategory', 'Add a new note', {
-    product: productOptions,
-    name: nameOptions,
-    quantity: quantityOptions
-  })
-  .command('getAllCategories', 'To get all notes')
-  .command('Addquantity', 'Reading a note', {
-    product: productOptions,
-    name: nameOptions,
-    quantity: quantityOptions
-  })
-  .command('Removequantity', 'Removing a note', {
-    product: productOptions,
-    name: nameOptions,
-    quantity: quantityOptions
-
-  })
-  .help()
-  .argv;
-
-var command = argv._[0];
-
 var definitions = require('./definitions.js');
 
+// const nameOptions = {
+//   describe: 'Name of note',
+//   demand: true,
+//   alias: 'n'
+// };
+//
+// const productOptions = {
+//   describe: 'Name of product',
+//   demand: true,
+//   alias: 'p'
+// };
+//
+// const quantityOptions = {
+//   describe: 'Name of product',
+//   demand: true,
+//   alias: 'q'
+// };
+//
+// const argv = yargs
+//   .command('addCategory', 'Add a new note', {
+//     product: productOptions,
+//     name: nameOptions,
+//     quantity: quantityOptions
+//   })
+//   .command('getAllCategories', 'To get all notes')
+//   .command('Addquantity', 'Reading a note', {
+//     product: productOptions,
+//     name: nameOptions,
+//     quantity: quantityOptions
+//   })
+//   .command('Removequantity', 'Removing a note', {
+//     product: productOptions,
+//     name: nameOptions,
+//     quantity: quantityOptions
+//
+//   })
+//   .help()
+//   .argv;
+//
+// var command = argv._[0];
 //console.log('Process.Argv',process.argv);
 //console.log('Yargs.Argv',yargs.argv);
 //console.log('Command:',command);
@@ -119,8 +117,12 @@ hbs.registerHelper('screamIt',(text)=>
 {
   return text.toUpperCase();
 });
-
 app.get('/',(req,res)=> {
+  res.render('loginpage.hbs',{
+    pageTitle:'Inventory'
+  });
+});
+app.get('/home',(req,res)=> {
   res.render('home.hbs',{
     pageTitle:'Inventory'
   });
@@ -141,56 +143,50 @@ app.get('/removequantity',(req,res)=> {
   });
 });
 
-app.post('/add', urlencodedParser, function (req, res) {
+app.post('/', urlencodedParser, function (req, res) {
+    // Prepare output in JSON format
+
+    var bool = definitions.checklogin(req.body.username,req.body.password);
+    if(bool===true)
+    {
+      res.render('home.hbs',{
+        pageTitle:'Inventory'
+      });
+    }
+    else {
+      res.end('Incorrect id/password');
+    }
+});
+
+app.post('/addcategory', urlencodedParser, function (req, res) {
     // Prepare output in JSON format
 
     var bool = definitions.addCategory(req.body.name,req.body.product,parseInt(req.body.quantity));
     var message = bool ? 'Product Category was added':'This product already exists';
-    console.log(message);
-    res.end(message);
+    console.log(req.body.name);
+    res.render('commonresponse.hbs',{
+      pageTitle: message
+    });
 });
 app.post('/addq', urlencodedParser, function (req, res) {
-    // Prepare output in JSON format
-    response = {
-        name: req.body.name,
-        product: req.body.product,
-        quantity: parseInt(req.body.quantity)
-    };
 
     var bool = definitions.Addquantity(req.body.name,req.body.product,parseInt(req.body.quantity));
     var message = bool ? 'Quantity was added':'No such product found';
     console.log(message);
-    res.end(message);
+    res.render('commonresponse.hbs',{
+      pageTitle: message
+    });
 });
 
 app.post('/removeq', urlencodedParser, function (req, res) {
-    // Prepare output in JSON format
-    response = {
-        name: req.body.name,
-        product: req.body.product,
-        quantity: parseInt(req.body.quantity)
-    };
-
     var bool = definitions.Removequantity(req.body.name,req.body.product,parseInt(req.body.quantity));
     var message = bool ? 'Quantity was removed':'No such product exists';
     console.log(message);
-    res.end(message);
+    res.render('commonresponse.hbs',{
+      pageTitle: message
+    });
 });
 
-function writeResponseToFile(response) {
-
-    const __file = __dirname + "/" + "categories.json";
-
-    fs.readFile(__file, 'utf8', (err, data) => {
-        stockData = JSON.parse(data);
-        stockData.push(response);
-
-        fs.writeFile(__file, JSON.stringify(stockData), 'utf-8', function(err) {
-            if (err) throw err
-            console.log('Done!')
-        })
-    });
-}
 
 app.get('/list', (req, res) => {
     fs.readFile(__dirname + "/" + "categories.json", 'utf8', (err, data) => {

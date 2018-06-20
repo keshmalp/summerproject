@@ -13,5 +13,21 @@
 }, {
   "name": "Adidas",
   "product": "Shirt",
-  "quantity": 39
+  "quantity": 85
+}, {
+  "name": "Adida",
+  "product": "Shirt",
+  "quantity": 23
+}, {
+  "name": "juma",
+  "product": "T-Shirt",
+  "quantity": 23
+}, {
+  "name": "Adida",
+  "product": "T-Shirt",
+  "quantity": 23
+}, {
+  "name": "hum",
+  "product": "hai",
+  "quantity": 21
 }]

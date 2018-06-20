@@ -10,9 +10,20 @@ var fetchnote = () => {
 };
 
 var savenote = (notes) => {
-  fs.writeFileSync('categories.json', JSON.stringify(notes));
+  fs.writeFileSync('logindata.json', JSON.stringify(notes));
+};
+var fetchlogin = () => {
+  try {
+    var noteString = fs.readFileSync('logindata.json');
+    return JSON.parse(noteString);
+  } catch (e) {
+    return [];
+  }
 };
 
+var savelogin = (notes) => {
+  fs.writeFileSync('logindata.json', JSON.stringify(notes));
+};
 
 
 var addCategory = (name,product,quantity) => {
@@ -23,16 +34,17 @@ var addCategory = (name,product,quantity) => {
     product,
     quantity
   };
-  var found = false;
   notes.filter((note) => {
     if(note.name === name)
     {
+      console.log('Gotcha');
       if(note.product===product)
       {
         found = false;
       }
     }
   });
+  console.log(found);
   if(found===true)
   {
     notes.push(note);
@@ -83,6 +95,22 @@ var Addquantity = (name,product,quantity) => {
   return found;
 };
 
+var checklogin = (uname,pwd) => {
+  var found=false;
+  var notes = fetchlogin();
+  notes.filter((not) => {
+    if(not.username === uname)
+    {
+      if(not.password===pwd)
+      {
+        found=true;
+      }
+    }
+  });
+  savelogin(notes);
+  return found;
+};
+
 var logNote = ((note) => {
   console.log('--');
   console.log('Title:' + note.name);
@@ -99,5 +127,6 @@ module.exports = {
   getAllCategories,
   Removequantity,
   Addquantity,
-  logNote
+  logNote,
+  checklogin
 }
