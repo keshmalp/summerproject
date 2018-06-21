@@ -17,7 +17,7 @@ var app=express();
 hbs.registerPartials(__dirname+'/views/partials');
 app.set('view engine','hbs');
 app.use(express.static(__dirname+'/views'));
-var definitions = require('./definitions.js');
+const definitions = require('./definitions.js');
 
 // const nameOptions = {
 //   describe: 'Name of note',
@@ -192,6 +192,17 @@ app.get('/list', (req, res) => {
     fs.readFile(__dirname + "/" + "categories.json", 'utf8', (err, data) => {
         res.end(data);
     });
+});
+
+//view
+app.get('/data', (req, res) => {
+  fs.readFile(__dirname + "/" + "categories.json", 'utf8', (err, data) => {
+      res.send(data);
+  });
+});
+
+app.get('/view', (req, res) => {
+  res.sendfile(__dirname + "/" + "view.html");
 });
 
 app.listen(port,()=>
