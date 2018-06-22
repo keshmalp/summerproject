@@ -10,7 +10,7 @@ var fetchnote = () => {
 };
 
 var savenote = (notes) => {
-  fs.writeFileSync('logindata.json', JSON.stringify(notes));
+  fs.writeFileSync('categories.json', JSON.stringify(notes));
 };
 var fetchlogin = () => {
   try {

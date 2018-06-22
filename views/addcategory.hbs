@@ -20,6 +20,7 @@ body {
 <body>
   {{>header}}
   <form action="http://localhost:3000/addcategory" method="POST">
+    <center>
     Name:
     <br>
     <input type="text" name="name" placeholder="Name" id="user_input"><br>
@@ -30,8 +31,8 @@ body {
     <br>
     <input type="number" name="quantity" placeholder="Quantity" id="user_input">
     <br><br>
-    <input type="submit" value ="Submit" onclick="showInput();"><br/>
-     <p><span id='display'></span></p>
+    <input type="submit" value ="Submit"><br>
+  </center>
   </form>
 </body>
 
