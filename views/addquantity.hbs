@@ -15,13 +15,27 @@ body {
       <center>
       Name:
       <br>
-      <input type="text" name="name" placeholder="Name"><br>
+      <input list="name" name="name" autocomplete="off">
+      <datalist id="name">
+        <option value="Adidas">
+        <option value="Nike">
+        <option value="Puma">
+        <option value="Super-Dry">
+        <option value="Reebok">
+      </datalist><br>
       Product:
       <br>
-      <input type="text" name="product" placeholder="Product"><br>
+      <input list="prod" name="product" autocomplete="off">
+      <datalist id="prod">
+          <option value="T-Shirt">
+          <option value="Shirt">
+          <option value="Tracks">
+          <option value="Shoes">
+          <option value="Bag">
+      </datalist><br>
       Quantity:
       <br>
-      <input type="number" name="quantity" placeholder="Quantity">
+      <input type="number" name="quantity"  min="0" autocomplete="off">
       <br><br>
       <input type="submit" value="Submit">
     </center>
