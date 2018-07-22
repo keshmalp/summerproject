@@ -7,6 +7,9 @@ const path = require('path');
 const port = process.env.PORT || 3000;
 const bodyParser = require('body-parser');
 
+var {mongoose}=require('./db/mongoose.js');
+const products=require('./model/products.js');
+
 // Create application/x-www-form-urlencoded parser
 var urlencodedParser = bodyParser.urlencoded({
   extended: false
@@ -18,80 +21,6 @@ hbs.registerPartials(__dirname + '/views/partials');
 app.set('view engine', 'hbs');
 app.use(express.static(__dirname + '/views'));
 const definitions = require('./definitions.js');
-
-// const nameOptions = {
-//   describe: 'Name of note',
-//   demand: true,
-//   alias: 'n'
-// };
-//
-// const productOptions = {
-//   describe: 'Name of product',
-//   demand: true,
-//   alias: 'p'
-// };
-//
-// const quantityOptions = {
-//   describe: 'Name of product',
-//   demand: true,
-//   alias: 'q'
-// };
-//
-// const argv = yargs
-//   .command('addCategory', 'Add a new note', {
-//     product: productOptions,
-//     name: nameOptions,
-//     quantity: quantityOptions
-//   })
-//   .command('getAllCategories', 'To get all notes')
-//   .command('Addquantity', 'Reading a note', {
-//     product: productOptions,
-//     name: nameOptions,
-//     quantity: quantityOptions
-//   })
-//   .command('Removequantity', 'Removing a note', {
-//     product: productOptions,
-//     name: nameOptions,
-//     quantity: quantityOptions
-//
-//   })
-//   .help()
-//   .argv;
-//
-// var command = argv._[0];
-//console.log('Process.Argv',process.argv);
-//console.log('Yargs.Argv',yargs.argv);
-//console.log('Command:',command);
-
-// if (command === 'addCategory') {
-//   console.log('Adding Category');
-//   var note = definitions.addCategory(argv.name, argv.product,argv.quantity);
-//   if (typeof(note) === "undefined") {
-//     console.log("This is a duplicate product");
-//   } else {
-//     definitions.logNote(note);
-//   }
-// } else if (command === 'getAllCategories') {
-//   console.log("All note(s) :");
-//   var notem = definitions.getAllCategories();
-//   var i;
-//   for (i = 0; i < notem.length; i++) {
-//     definitions.logNote(notem[i]);
-//   }
-//
-// } else if (command === 'Removequantity') {
-//
-//   var noteremoved = definitions.Removequantity(argv.name,argv.product,argv.quantity);
-//   var message = noteremoved ? 'Quantity was removed' : 'Product was not found';
-//   console.log(message);
-//
-// } else if (command === 'Addquantity') {
-//   var noteadded = definitions.Addquantity(argv.name,argv.product,argv.quantity);
-//   var message = noteadded ? 'Quantity was added' : 'Product was not found';
-//   console.log(message);
-// } else {
-//   console.log('Not recognized');
-// }
 
 app.use((req, res, next) => {
   var now = new Date().toString();
@@ -118,9 +47,13 @@ app.get('/', (req, res) => {
   });
 });
 app.get('/home', (req, res) => {
+  products.products.find({},{},function(err,docs) {
+    console.log(docs);
   res.render('home.hbs', {
-    pageTitle: 'Inventory'
+    pageTitle: 'Inventory',
+    productlist: docs
   });
+});
 });
 app.get('/addcategory', (req, res) => {
   res.render('addcategory.hbs', {
@@ -140,7 +73,7 @@ app.get('/removequantity', (req, res) => {
 
 app.post('/', urlencodedParser, function(req, res) {
   // Prepare output in JSON format
-
+  console.log(req.body.username, req.body.password);
   var bool = definitions.checklogin(req.body.username, req.body.password);
   if (bool === true) {
     res.render('home.hbs', {
@@ -155,6 +88,7 @@ app.post('/addcategory', urlencodedParser, function(req, res) {
   // Prepare output in JSON format
 
   var bool = definitions.addCategory(req.body.name, req.body.product, parseInt(req.body.quantity));
+  console.log(bool);
   var message = bool ? 'Product Category was added' : 'This product already exists';
   console.log(req.body.name);
   res.render('commonresponse.hbs', {
@@ -189,8 +123,9 @@ app.get('/list', (req, res) => {
 
 //view
 app.get('/data', (req, res) => {
-  fs.readFile(__dirname + "/" + "categories.json", 'utf8', (err, data) => {
-    res.send(data);
+  //fs.readFile(__dirname + "/" + "categories.json", 'utf8', (err, data) => {
+      products.products.find({},{},function(err,docs) {
+        res.send(docs);
   });
 });
 

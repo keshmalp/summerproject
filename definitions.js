@@ -1,132 +1,120 @@
 const fs = require('fs');
+const database =require('./database.js');
+const products=require('./model/products.js');
+const login=require('./model/login.js');
+var mongoose=require('mongoose');
 
-var fetchnote = () => {
-  try {
-    var noteString = fs.readFileSync('categories.json');
-    return JSON.parse(noteString);
-  } catch (e) {
-    return [];
-  }
-};
-
-var savenote = (notes) => {
-  fs.writeFileSync('categories.json', JSON.stringify(notes));
-};
-var fetchlogin = () => {
-  try {
-    var noteString = fs.readFileSync('logindata.json');
-    return JSON.parse(noteString);
-  } catch (e) {
-    return [];
-  }
-};
-
-var savelogin = (notes) => {
-  fs.writeFileSync('logindata.json', JSON.stringify(notes));
-};
 
 
 var addCategory = (name,product,quantity) => {
-  var found = true;
-  var notes = fetchnote();
-  var note = {
-    name,
-    product,
-    quantity
-  };
-  notes.filter((note) => {
-    if(note.name === name)
-    {
-      console.log('Gotcha');
-      if(note.product===product)
-      {
-        found = false;
-      }
-    }
-  });
-  console.log(found);
-  if(found===true)
+  const database = require('./database.js');
+  var found = false;
+  products.products.findOne({$and:[{ 'name': name},{'product':product}]}, 'name', function (err, company) {
+  if (company===null)
   {
-    notes.push(note);
-    savenote(notes);
-    return true;
+    console.log(company);
+    found=false;
   }
   else {
-    return false;
-    }
-  };
-
-var getAllCategories = () => {
-  return fetchnote();
+  found=true;
+  console.log(company);
+}
+}).then(()=>
+{
+  console.log(found);
+  if(found===false)
+  {
+  database.addCategory(name,product,quantity);
+  }
+});
+if(bool===true)
+{
+  return true;
+}
 };
 
 var Removequantity = (name,product,quantity) => {
   var found=false;
-  var notes = fetchnote();
-  notes.filter((not) => {
-    if(not.name === name)
+  var myquery = { name: name, product:product };
+  var newvalues = { $inc: {quantity:-quantity } };
+  products.products.updateOne(myquery, newvalues, function(err, res) {
+    if (err)
     {
-      if(not.product===product)
-      {
-        not.quantity=not.quantity-quantity;
-        found=true;
-      }
+      console.log(err);
     }
-  });
-  savenote(notes);
-
-  return found;
+    else {
+    console.log(res);
+    found=true;
+      }
+  })
 };
 
 var Addquantity = (name,product,quantity) => {
+  
   var found=false;
-  var notes = fetchnote();
-  notes.filter((not) => {
-    if(not.name === name)
+  var myquery = { name: name, product:product };
+  var newvalues = { $inc: {quantity:quantity } };
+  products.products.updateOne(myquery, newvalues, function(err, res) {
+    if (res.n===0)
     {
-      if(not.product===product)
-      {
-        not.quantity=not.quantity+quantity;
-        found=true;
-      }
+      found=false;
+      console.log('There was some error');
     }
+    else {
+      found=true;
+    console.log(res);
+      }
   });
-  savenote(notes);
-  return found;
+  if (found===false)
+  {
+    return false;
+  }
+  else {
+  return true;
+    }
+
 };
 
 var checklogin = (uname,pwd) => {
   var found=false;
-  var notes = fetchlogin();
-  notes.filter((not) => {
-    if(not.username === uname)
-    {
-      if(not.password===pwd)
-      {
-        found=true;
-      }
-    }
-  });
-  savelogin(notes);
-  return found;
-};
-
-var logNote = ((note) => {
-  console.log('--');
-  console.log('Title:' + note.name);
-  console.log('Content: ' + note.product);
-  console.log('Quantity: ' + note.quantity);
+  // var newProduct=new login.login({
+  //   username: uname,
+  //   password: pwd
+  // });
+  //
+  // newProduct.save().then((doc)=>
+  // {
+  //   console.log(JSON.stringify(doc,undefined,2));
+  // },
+  // (e)=>
+  // {
+  //   console.log('Unable to save');
+  // });
+  login.login.findOne({username:uname},{},function(err,log)
+  {
+  if(log===null)
+  {
+  console.log(log);
+  found=false;
+  }
+  else {
+    console.log(log);
+    found=true;
+  }
 });
 
+ var bool=setTimeout(function(){
+   console.log(found);
+ },500);
+ console.log(bool);
+ return true;
 
-
+};
 
 
 module.exports = {
   addCategory,
-  getAllCategories,
   Removequantity,
   Addquantity,
-  logNote,
   checklogin
 }
