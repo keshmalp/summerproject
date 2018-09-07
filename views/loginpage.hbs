@@ -3,7 +3,7 @@
   <head>
     <meta charset = "utf-8">
     <title>Some website</title>
-    <h1><center>Hellew</center></h1>
+    <h1><center>Hello</center></h1>
     <style>
   a:link {
       color: green;
@@ -52,32 +52,29 @@
       display: inline-block;
     font-size: 16px;
     }
-body {
-    background-color: #93B874;
-    background-image: url("download.jpg");
-    background-repeat: no-repeat;
-    background-size: 1800px 900px;
-}
+
 </style>
   </head>
   <body>
-  <form action="http://127.0.0.1:3000/" method="POST">
+  <form action="http://127.0.0.1:4000/login" method="POST">
     <center>
-   <div class="container">
+
+
      <label for="uname"><b>Username</b></label><br><br>
      <input type="text" placeholder="Enter Username" name="username" autocomplete="off"><br><br>
      <label for="psw"><b>Password</b></label><br><br>
      <input type="password" placeholder="Enter Password" name="password" autocomplete="off"><br><br>
 
-     <button type="submit" class="button">Login</button><br>
+     <input type="submit"  value="Submit">Login<br>
 
-   </div>
+
+   </form>
 
    <div class="container"><br>
      <button type="button" class="button">Cancel</button><br>
      <span class="psw"><a href="#">password?</a></span><br>
    </div>
  </center>
-  </form>
+
 </body>
 </html>

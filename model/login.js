@@ -1,7 +1,7 @@
 
 var {mongoose}=require('./../db/mongoose.js');
 
-var login=mongoose.model('login',{
+var login=mongoose.model('logins',{
   username:
   {
     type:String,

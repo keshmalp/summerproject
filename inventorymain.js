@@ -4,7 +4,7 @@ const yargs = require('yargs');
 const express = require('express');
 const hbs = require('hbs');
 const path = require('path');
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 4000;
 const bodyParser = require('body-parser');
 
 var {mongoose}=require('./db/mongoose.js');
@@ -46,6 +46,47 @@ app.get('/', (req, res) => {
     pageTitle: 'Inventory'
   });
 });
+
+// app.get('/trial', function(req, res) {
+//
+//   var array = [1,2,3,4,5];
+//
+//   caller(array);
+//
+//   console.log("After");
+// });
+//
+// app.get('/trial2', function(req, res) {
+//
+//   var array = [1,2,3,4,5];
+//
+//   var promises = new Promise(function() {
+//     return caller(array);
+//   });
+//
+//   promises
+//   .then(function() {
+//     console.log("After");
+//   })
+//   .catch(function(error) {
+//     consle.log(error);
+//
+//   array.forEach(function() {});
+//
+// });
+//
+//
+// function caller(array) {
+//   setTimeout(function() {
+//     array.forEach(function(value) {
+//       console.log(value);
+//     });
+//     return true;
+//   }, 3000);
+//
+// }
+
+
 app.get('/home', (req, res) => {
   products.products.find({},{},function(err,docs) {
     console.log(docs);
@@ -71,11 +112,12 @@ app.get('/removequantity', (req, res) => {
   });
 });
 
-app.post('/', urlencodedParser, function(req, res) {
+app.post('/login', urlencodedParser, function(req, res) {
   // Prepare output in JSON format
   console.log(req.body.username, req.body.password);
-  var bool = definitions.checklogin(req.body.username, req.body.password);
-  if (bool === true) {
+  var log = definitions.checklogin(req.body.username, req.body.password);
+  console.log(log)
+  if (log!=null) {
     res.render('home.hbs', {
       pageTitle: 'Inventory'
     });
@@ -87,13 +129,18 @@ app.post('/', urlencodedParser, function(req, res) {
 app.post('/addcategory', urlencodedParser, function(req, res) {
   // Prepare output in JSON format
 
-  var bool = definitions.addCategory(req.body.name, req.body.product, parseInt(req.body.quantity));
-  console.log(bool);
+  var log = definitions.addCategory(req.body.name, req.body.product, parseInt(req.body.quantity));
+  console.log("Returned: " + log);
   var message = bool ? 'Product Category was added' : 'This product already exists';
   console.log(req.body.name);
   res.render('commonresponse.hbs', {
     pageTitle: message
   });
+
+
+
+
+
 });
 app.post('/addq', urlencodedParser, function(req, res) {
 
@@ -125,6 +172,15 @@ app.get('/list', (req, res) => {
 app.get('/data', (req, res) => {
   //fs.readFile(__dirname + "/" + "categories.json", 'utf8', (err, data) => {
       products.products.find({},{},function(err,docs) {
+        res.send(docs);
+  });
+});
+
+app.get('/dataquantity', (req, res) => {
+  //fs.readFile(__dirname + "/" + "categories.json", 'utf8', (err, data) => {
+
+      products.products.find({name:'Adidas'} ,{},function(err,docs) {
+        console.log(docs);
         res.send(docs);
   });
 });
